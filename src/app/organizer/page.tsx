@@ -109,11 +109,11 @@ export default function OrganizerPage() {
           </button>
         </div>
 
-        {activeTab === 'business' && (
+        {activeTab === 'business' && business && (
           <BusinessProfile business={business} onUpdate={loadBusiness} />
         )}
 
-        {activeTab === 'events' && (
+        {activeTab === 'events' && business && (
           <EventsManager businessId={business.id} />
         )}
       </div>

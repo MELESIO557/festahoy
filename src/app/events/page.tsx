@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
@@ -26,7 +26,7 @@ interface Event {
   }
 }
 
-export default function EventsPage() {
+function EventsContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const city = searchParams.get('city') || 'Madrid'
@@ -358,5 +358,13 @@ export default function EventsPage() {
         )}
       </div>
     </div>
+  )
+}
+
+export default function EventsPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-gray-50"><div className="text-gray-600">Cargando...</div></div>}>
+      <EventsContent />
+    </Suspense>
   )
 }

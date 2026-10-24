@@ -111,7 +111,7 @@ export default function EventDetailPage() {
       try {
         await navigator.share({
           title: event?.title,
-          text: event?.description,
+          text: event?.description || undefined,
           url: window.location.href
         })
       } catch (error) {
@@ -144,7 +144,7 @@ export default function EventDetailPage() {
 
   const allImages = event?.cover_image_url 
     ? [event.cover_image_url, ...(event.images || [])]
-    : event.images || []
+    : event?.images || []
 
   if (loading) {
     return (

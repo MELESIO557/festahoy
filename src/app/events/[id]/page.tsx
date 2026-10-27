@@ -58,6 +58,10 @@ export default function EventDetailPage() {
   }, [params.id])
 
   const loadEvent = async () => {
+    if (!supabase) {
+      setLoading(false)
+      return
+    }
     setLoading(true)
     try {
       const { data: eventData, error: eventError } = await supabase

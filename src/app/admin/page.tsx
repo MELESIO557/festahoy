@@ -32,7 +32,7 @@ export default function AdminPage() {
   }, [isAdmin, activeTab])
 
   const checkAdminAccess = async () => {
-    if (!loading && user) {
+    if (!loading && user && supabase) {
       const { data, error } = await supabase
         .from('profiles')
         .select('role')
@@ -48,6 +48,7 @@ export default function AdminPage() {
   }
 
   const loadStats = async () => {
+    if (!supabase) return
     try {
       const [usersCount, businessesCount, eventsCount, pendingEventsCount, paymentsData, featuredCount] = await Promise.all([
         supabase.from('profiles').select('id', { count: 'exact', head: true }),
@@ -245,6 +246,10 @@ function EventsManagement() {
   }, [filter])
 
   const loadEvents = async () => {
+    if (!supabase) {
+      setLoading(false)
+      return
+    }
     setLoading(true)
     try {
       let query = supabase
@@ -271,6 +276,7 @@ function EventsManagement() {
   }
 
   const handleApprove = async (eventId: string) => {
+    if (!supabase) return
     try {
       const { error } = await supabase
         .from('events')
@@ -285,6 +291,7 @@ function EventsManagement() {
   }
 
   const handleReject = async (eventId: string) => {
+    if (!supabase) return
     try {
       const { error } = await supabase
         .from('events')
@@ -386,6 +393,10 @@ function UsersManagement() {
   }, [])
 
   const loadUsers = async () => {
+    if (!supabase) {
+      setLoading(false)
+      return
+    }
     setLoading(true)
     try {
       const { data, error } = await supabase
@@ -403,6 +414,7 @@ function UsersManagement() {
   }
 
   const handleRoleChange = async (userId: string, newRole: string) => {
+    if (!supabase) return
     try {
       const { error } = await supabase
         .from('profiles')
@@ -479,6 +491,10 @@ function BusinessesManagement() {
   }, [])
 
   const loadBusinesses = async () => {
+    if (!supabase) {
+      setLoading(false)
+      return
+    }
     setLoading(true)
     try {
       const { data, error } = await supabase
@@ -499,6 +515,7 @@ function BusinessesManagement() {
   }
 
   const handleVerify = async (businessId: string) => {
+    if (!supabase) return
     try {
       const { error } = await supabase
         .from('businesses')
@@ -568,6 +585,10 @@ function PaymentsManagement() {
   }, [])
 
   const loadPayments = async () => {
+    if (!supabase) {
+      setLoading(false)
+      return
+    }
     setLoading(true)
     try {
       const { data, error } = await supabase

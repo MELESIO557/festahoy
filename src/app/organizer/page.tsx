@@ -37,7 +37,7 @@ export default function OrganizerPage() {
   }, [user])
 
   const loadBusiness = async () => {
-    if (user) {
+    if (user && supabase) {
       const { data, error } = await supabase
         .from('businesses')
         .select('*')
@@ -141,8 +141,9 @@ function CreateBusinessForm({ onSuccess }: { onSuccess: () => void }) {
     setError('')
 
     try {
+      if (!supabase || !user) throw new Error('Supabase not configured or user not authenticated')
       const { error } = await supabase.from('businesses').insert({
-        owner_id: user!.id,
+        owner_id: user.id,
         ...formData
       })
 
@@ -284,6 +285,7 @@ function BusinessProfile({ business, onUpdate }: { business: Business; onUpdate:
     setError('')
 
     try {
+      if (!supabase) throw new Error('Supabase not configured')
       const { error } = await supabase
         .from('businesses')
         .update(formData)
@@ -420,6 +422,10 @@ function EventsManager({ businessId }: { businessId: string }) {
   }, [businessId])
 
   const loadEvents = async () => {
+    if (!supabase) {
+      setLoading(false)
+      return
+    }
     setLoading(true)
     try {
       const { data, error } = await supabase
@@ -536,6 +542,7 @@ function CreateEventForm({ businessId, onSuccess, onCancel }: { businessId: stri
   }, [])
 
   const loadCategories = async () => {
+    if (!supabase) return
     const { data } = await supabase.from('categories').select('*')
     if (data) setCategories(data)
   }
@@ -546,6 +553,7 @@ function CreateEventForm({ businessId, onSuccess, onCancel }: { businessId: stri
     setError('')
 
     try {
+      if (!supabase) throw new Error('Supabase not configured')
       const { error } = await supabase.from('events').insert({
         business_id: businessId,
         ...formData,

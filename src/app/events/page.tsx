@@ -44,11 +44,13 @@ function EventsContent() {
   }, [city, selectedCategory, viewMode])
 
   const loadCategories = async () => {
+    if (!supabase) return
     const { data } = await supabase.from('categories').select('*')
     if (data) setCategories(data)
   }
 
   const loadFeaturedEvents = async () => {
+    if (!supabase) return
     try {
       const now = new Date().toISOString()
       
@@ -79,6 +81,10 @@ function EventsContent() {
   }
 
   const loadEvents = async () => {
+    if (!supabase) {
+      setLoading(false)
+      return
+    }
     setLoading(true)
     try {
       const today = new Date().toISOString().split('T')[0]

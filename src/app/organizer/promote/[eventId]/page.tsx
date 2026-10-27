@@ -58,6 +58,10 @@ export default function PromoteEventPage() {
   }, [params.eventId])
 
   const loadEvent = async () => {
+    if (!supabase) {
+      setLoading(false)
+      return
+    }
     setLoading(true)
     try {
       const { data, error } = await supabase
@@ -80,7 +84,7 @@ export default function PromoteEventPage() {
   }
 
   const handlePromote = async () => {
-    if (!selectedPackage || !event) return
+    if (!selectedPackage || !event || !supabase) return
 
     setProcessingPayment(true)
     setError('')

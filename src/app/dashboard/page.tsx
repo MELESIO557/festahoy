@@ -32,7 +32,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     const loadUserCity = async () => {
-      if (user) {
+      if (user && supabase) {
         const { data, error } = await supabase
           .from('profiles')
           .select('city')
@@ -54,7 +54,7 @@ export default function Dashboard() {
     setSelectedCity(city)
     
     // Update user's city in profile
-    if (user) {
+    if (user && supabase) {
       await supabase
         .from('profiles')
         .update({ city })

@@ -63,18 +63,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     })
     if (error) throw error
 
-    // Create profile
-    if (data.user) {
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .insert({
-          id: data.user.id,
-          email: data.user.email,
-          full_name: fullName,
-          role: 'user',
-        })
-      if (profileError) throw profileError
-    }
+    // Profile is created automatically by Supabase trigger
+    // No manual insertion needed
   }
 
   const signOut = async () => {
